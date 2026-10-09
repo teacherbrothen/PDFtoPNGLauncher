@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF to Quiz Images Launcher</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --callout-bg: #e0f2fe;
+      --callout-border: #bae6fd;
+      --callout-text: #0369a1;
+      --btn-blue: #0284c7;
+      --btn-blue-hover: #0369a1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 36px 28px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+      border: 1px solid #e2e8f0;
+      text-align: center;
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .callout-box {
+      background-color: var(--callout-bg);
+      border: 1px solid var(--callout-border);
+      color: var(--callout-text);
+      font-size: 14.5px;
+      line-height: 1.5;
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .callout-box ol {
+      margin-left: 20px;
+      margin-top: 6px;
+    }
+
+    .callout-box li {
+      margin-bottom: 4px;
+    }
+
+    .app-btn {
+      width: 100%;
+      border: none;
+      outline: none;
+      padding: 16px 20px;
+      border-radius: 10px;
+      background-color: var(--btn-blue);
+      color: #ffffff;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.15s ease-in-out;
+      box-shadow: 0 4px 10px rgba(2, 132, 199, 0.25);
+    }
+
+    .app-btn:hover {
+      background-color: var(--btn-blue-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(2, 132, 199, 0.3);
+    }
+
+    .app-btn:active {
+      transform: translateY(0);
+    }
+
+    .app-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2.2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container-card">
+    <h1 class="card-title">PDF to Quiz Images</h1>
+    
+    <div class="callout-box">
+      <strong>Instructions:</strong>
+      <ol>
+        <li>Click below to open the converter window.</li>
+        <li>Enter your <strong>Name</strong> and <strong>Assignment Name</strong>.</li>
+        <li>Drag and drop your PDF to convert your pages into images.</li>
+        <li>Save your pages and upload them into your Brightspace quiz!</li>
+      </ol>
+    </div>
+
+    <button class="app-btn" onclick="launchDedicatedWindow()">
+      <!-- Document / Image SVG Icon -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <circle cx="10" cy="13" r="2"></circle>
+        <path d="m20 17-3.5-3.5a2 2 0 0 0-2.8 0L9 18"></path>
+      </svg>
+      <span>Open PDF Converter</span>
+    </button>
+  </div>
+
+  <script>
+    // 1. DEFAULT CONVERTER URL
+    // Update this to where your converter HTML file is hosted (e.g. GitHub Pages)
+    const DEFAULT_CONVERTER_URL = "https://teacherbrothen.github.io/PDFtoPNG";
+
+    const params = new URLSearchParams(window.location.search);
+    const targetUrl = params.get('url') || DEFAULT_CONVERTER_URL;
+
+    // 2. DEDICATED POP-OUT WINDOW LOGIC
+    function launchDedicatedWindow() {
+      // Dimensions sized comfortably for the drop card & image gallery
+      const w = 780;
+      const h = 900;
+
+      // Center on student's screen
+      const left = Math.max(0, Math.round((window.screen.width - w) / 2));
+      const top = Math.max(0, Math.round((window.screen.height - h) / 2));
+
+      const features = `width=${w},height=${h},top=${top},left=${left},resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no,location=no`;
+      const win = window.open(targetUrl, "PdfConverterWindow", features);
+
+      if (win) {
+        win.focus();
+      } else {
+        // Fallback if browser pop-up blocker catches it
+        window.open(targetUrl, "_blank");
+      }
+    }
+  </script>
+
+</body>
+</html>
